@@ -22,6 +22,11 @@ export async function processMarkdown(raw: string): Promise<string> {
 
 export async function getTopicHtml(groupSlug: string, topicSlug: string): Promise<string> {
   const filePath = path.join(process.cwd(), 'content', groupSlug, `${topicSlug}.md`)
-  const raw = readFileSync(filePath, 'utf-8')
+  let raw: string
+  try {
+    raw = readFileSync(filePath, 'utf-8')
+  } catch {
+    throw new Error(`Topic not found: ${groupSlug}/${topicSlug}`)
+  }
   return processMarkdown(raw)
 }

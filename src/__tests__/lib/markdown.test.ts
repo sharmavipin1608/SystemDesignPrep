@@ -1,4 +1,6 @@
-import { processMarkdown } from '@/lib/markdown'
+/* @jest-environment node */
+import path from 'path'
+import { processMarkdown, getTopicHtml } from '@/lib/markdown'
 
 describe('processMarkdown', () => {
   it('converts markdown headings to HTML h2 tags', async () => {
@@ -26,5 +28,19 @@ describe('processMarkdown', () => {
     const html = await processMarkdown(md)
     expect(html).not.toContain('title: Test')
     expect(html).toContain('Section')
+  })
+})
+
+describe('getTopicHtml', () => {
+  it('reads and processes a markdown file from content directory', async () => {
+    // Uses a real file from the content directory
+    const html = await getTopicHtml('caching', 'caching')
+    expect(html).toContain('<h2')
+  })
+
+  it('throws a clear error when topic does not exist', async () => {
+    await expect(getTopicHtml('caching', 'nonexistent-topic')).rejects.toThrow(
+      'Topic not found: caching/nonexistent-topic'
+    )
   })
 })
