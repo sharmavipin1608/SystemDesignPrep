@@ -1,26 +1,67 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f6fa;
+  --sidebar-bg: #ffffff;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --text: #1a202c;
+  --text-muted: #4a5568;
+  --text-dim: #b0bec5;
+  --accent: #5b4fd4;
+  --section-bg: #f8f9fc;
+  --code-bg: #f1f5f9;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --bg: #0f0f1a;
+  --sidebar-bg: #13131f;
+  --card-bg: #1a1a2e;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-dim: #3a4a5a;
+  --accent: #7c6aff;
+  --section-bg: #1a1a2e;
+  --code-bg: #0a0a14;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Section color classes */
+.section-blue   { --c: #5b8dd9; }
+.section-purple { --c: #9b59b6; }
+.section-teal   { --c: #1abc9c; }
+.section-red    { --c: #e74c3c; }
+.section-amber  { --c: #f39c12; }
+.section-gold   { --c: #f1c40f; }
+
+/* Prose styles for rendered markdown */
+.prose-content h3 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin: 12px 0 6px; }
+.prose-content p  { margin-bottom: 8px; font-size: 0.85rem; line-height: 1.7; }
+.prose-content ul { padding-left: 16px; font-size: 0.85rem; }
+.prose-content li { margin-bottom: 4px; line-height: 1.6; }
+.prose-content strong { color: var(--text); }
+.prose-content table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin: 8px 0; }
+.prose-content th, .prose-content td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+.prose-content th { background: var(--card-bg); font-weight: 600; }
+.prose-content code:not(pre code) {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  background: var(--code-bg);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.prose-content pre {
+  background: var(--code-bg);
+  border-radius: 6px;
+  padding: 12px;
+  overflow-x: auto;
+  margin: 8px 0;
+  font-size: 0.78rem;
 }
