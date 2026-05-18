@@ -1,31 +1,30 @@
-// Test the processMarkdown function - note that the actual ESM dependencies
-// (unified, remark, rehype) are tested at runtime, not in Jest due to ESM/CommonJS interop
-// This test verifies the implementation signature and integration
+import { processMarkdown } from '@/lib/markdown'
 
 describe('processMarkdown', () => {
-  it('should be a function that accepts markdown string', async () => {
-    // Import function signature (this works because we're just checking the export)
-    const markdownFile = require('fs').readFileSync(require('path').join(process.cwd(), 'src/lib/markdown.ts'), 'utf-8')
-    expect(markdownFile).toContain('export async function processMarkdown')
+  it('converts markdown headings to HTML h2 tags', async () => {
+    const html = await processMarkdown('## What is it?\n\nSome content here.')
+    expect(html).toContain('<h2')
+    expect(html).toContain('What is it?')
+    expect(html).toContain('Some content here.')
   })
 
-  it('should call gray-matter to strip frontmatter', () => {
-    const markdownFile = require('fs').readFileSync(require('path').join(process.cwd(), 'src/lib/markdown.ts'), 'utf-8')
-    expect(markdownFile).toContain('matter(raw)')
+  it('renders tables via remark-gfm', async () => {
+    const md = '| A | B |\n|---|---|\n| 1 | 2 |'
+    const html = await processMarkdown(md)
+    expect(html).toContain('<table')
+    expect(html).toContain('<td')
   })
 
-  it('should use unified with remark-gfm for tables', () => {
-    const markdownFile = require('fs').readFileSync(require('path').join(process.cwd(), 'src/lib/markdown.ts'), 'utf-8')
-    expect(markdownFile).toContain('remarkGfm')
+  it('leaves mermaid code blocks with language-mermaid class', async () => {
+    const md = '```mermaid\ngraph TD\n  A-->B\n```'
+    const html = await processMarkdown(md)
+    expect(html).toContain('language-mermaid')
   })
 
-  it('should use rehype-highlight for code blocks', () => {
-    const markdownFile = require('fs').readFileSync(require('path').join(process.cwd(), 'src/lib/markdown.ts'), 'utf-8')
-    expect(markdownFile).toContain('rehypeHighlight')
-  })
-
-  it('should export getTopicHtml function for filesystem operations', () => {
-    const markdownFile = require('fs').readFileSync(require('path').join(process.cwd(), 'src/lib/markdown.ts'), 'utf-8')
-    expect(markdownFile).toContain('export async function getTopicHtml')
+  it('strips frontmatter before processing', async () => {
+    const md = '---\ntitle: Test\n---\n## Section\n\nBody text.'
+    const html = await processMarkdown(md)
+    expect(html).not.toContain('title: Test')
+    expect(html).toContain('Section')
   })
 })
