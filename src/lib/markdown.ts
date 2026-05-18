@@ -14,7 +14,7 @@ export async function processMarkdown(raw: string): Promise<string> {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype)
-    .use(rehypeHighlight, { ignoreMissing: true })
+    .use(rehypeHighlight)
     .use(rehypeStringify)
     .process(content)
   return String(result)
