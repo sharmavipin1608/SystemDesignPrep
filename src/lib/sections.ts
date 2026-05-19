@@ -27,6 +27,20 @@ export function splitIntoSections(html: string): TopicSection[] {
     .filter(s => s.heading.length > 0)
 }
 
+function shortenHeading(heading: string): string {
+  return heading
+    .replace(/\([^)]*\)/g, '')        // strip parentheticals
+    .replace(/^(what is it\??|overview|introduction)/i, '')
+    .replace(/^the\s+/i, '')           // strip leading "The"
+    .replace(/\s+(strategies|policies|techniques|problem|patterns|guide|overview)\s*$/i, '')
+    .replace(/^cache\s+/i, '')         // strip leading "Cache"
+    .trim()
+}
+
 export function getSubtitle(sections: TopicSection[]): string {
-  return sections.slice(0, 4).map(s => s.heading).join(' · ')
+  return sections
+    .map(s => shortenHeading(s.heading))
+    .filter(s => s.length > 0)
+    .slice(0, 4)
+    .join(' · ')
 }

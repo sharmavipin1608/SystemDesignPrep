@@ -15,96 +15,173 @@ interface Props {
   searchEntries: SearchEntry[]
 }
 
-export function Sidebar({ navGroups, searchEntries }: Props) {
+function SidebarContent({
+  navGroups,
+  searchEntries,
+  onLinkClick,
+}: {
+  navGroups: NavGroup[]
+  searchEntries: SearchEntry[]
+  onLinkClick?: () => void
+}) {
   const pathname = usePathname()
+
+  return (
+    <>
+      {/* Logo + theme toggle */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '12px 16px',
+          flexShrink: 0,
+          borderBottom: '1px solid var(--border)',
+        }}
+      >
+        <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--accent)', letterSpacing: '-0.3px' }}>
+          SystemDesign.prep
+        </span>
+        <ThemeToggle />
+      </div>
+
+      {/* Search */}
+      <div style={{ padding: '8px 12px', flexShrink: 0, borderBottom: '1px solid var(--border)' }}>
+        <SearchModal entries={searchEntries} />
+      </div>
+
+      {/* Nav groups */}
+      <nav style={{ flex: 1, overflowY: 'auto', padding: '12px 8px' }}>
+        {navGroups.map(group => (
+          <div key={group.slug} style={{ marginBottom: 20 }}>
+            {/* Group label row */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '0 8px',
+                marginBottom: 4,
+              }}
+            >
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 7,
+                  height: 7,
+                  borderRadius: '50%',
+                  flexShrink: 0,
+                  background: group.color,
+                }}
+              />
+              <span
+                style={{
+                  fontSize: '0.6rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.12em',
+                  color: 'var(--text-dim)',
+                }}
+              >
+                {group.title}
+              </span>
+            </div>
+
+            {/* Topic links */}
+            {group.topics.map(topicSlug => {
+              const href = `/${group.slug}/${topicSlug}`
+              const isActive = pathname === href
+              return (
+                <Link
+                  key={topicSlug}
+                  href={href}
+                  onClick={onLinkClick}
+                  style={{
+                    display: 'block',
+                    padding: '5px 10px',
+                    borderRadius: 6,
+                    fontSize: '0.8rem',
+                    marginBottom: 1,
+                    color: isActive ? 'var(--accent)' : 'var(--text-muted)',
+                    background: isActive ? 'var(--card-bg)' : 'transparent',
+                    fontWeight: isActive ? 600 : 400,
+                  }}
+                >
+                  {slugToTitle(topicSlug)}
+                </Link>
+              )
+            })}
+          </div>
+        ))}
+      </nav>
+    </>
+  )
+}
+
+export function Sidebar({ navGroups, searchEntries }: Props) {
   const [open, setOpen] = useState(false)
 
   return (
     <>
-      {/* Mobile hamburger */}
+      {/* Desktop sidebar */}
+      <aside
+        className="desktop-only flex-col"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '220px',
+          height: '100vh',
+          overflowY: 'auto',
+          zIndex: 20,
+          background: 'var(--sidebar-bg)',
+          borderRight: '1px solid var(--border)',
+        }}
+      >
+        <SidebarContent navGroups={navGroups} searchEntries={searchEntries} />
+      </aside>
+
+      {/* Mobile: hamburger */}
       <button
         aria-label="Toggle menu"
         onClick={() => setOpen(o => !o)}
-        className="md:hidden fixed top-3 left-3 z-50 p-1.5 rounded"
-        style={{ background: 'var(--card-bg)', border: '1px solid var(--border)' }}
+        className="mobile-only"
+        style={{
+          position: 'fixed', top: 12, left: 12, zIndex: 50,
+          padding: 8, borderRadius: 6,
+          background: 'var(--card-bg)', border: '1px solid var(--border)',
+        }}
       >
         <span style={{ display: 'block', width: 18, height: 2, background: 'var(--text)', marginBottom: 4 }} />
         <span style={{ display: 'block', width: 18, height: 2, background: 'var(--text)', marginBottom: 4 }} />
         <span style={{ display: 'block', width: 18, height: 2, background: 'var(--text)' }} />
       </button>
 
-      {/* Overlay on mobile */}
+      {/* Mobile: backdrop */}
       {open && (
         <div
-          className="md:hidden fixed inset-0 z-40"
-          style={{ background: 'rgba(0,0,0,0.5)' }}
+          className="mobile-only"
+          style={{ position: 'fixed', inset: 0, zIndex: 30, background: 'rgba(0,0,0,0.5)' }}
           onClick={() => setOpen(false)}
         />
       )}
 
-      {/* Sidebar panel */}
+      {/* Mobile: slide-in panel */}
       <aside
-        className={`
-          fixed md:static top-0 left-0 z-40 h-full flex flex-col
-          w-[220px] transition-transform duration-200
-          ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        `}
-        style={{ background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border)' }}
+        className="mobile-only"
+        style={{
+          position: 'fixed', top: 0, left: 0, zIndex: 40, height: '100%',
+          width: 260, display: 'flex', flexDirection: 'column',
+          transform: open ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 200ms',
+          background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border)',
+        }}
       >
-        {/* Header */}
-        <div
-          className="flex items-center justify-between px-4 py-3 flex-shrink-0"
-          style={{ borderBottom: '1px solid var(--border)' }}
-        >
-          <span className="font-bold text-sm" style={{ color: 'var(--accent)' }}>
-            SystemDesign.prep
-          </span>
-          <ThemeToggle />
-        </div>
-
-        {/* Search */}
-        <div className="px-3 py-2 flex-shrink-0" style={{ borderBottom: '1px solid var(--border)' }}>
-          <SearchModal entries={searchEntries} />
-        </div>
-
-        {/* Nav */}
-        <nav className="flex-1 overflow-y-auto py-3 px-2">
-          {navGroups.map(group => (
-            <div key={group.slug} className="mb-5">
-              <div className="flex items-center gap-1.5 px-2 mb-1">
-                <span
-                  className="inline-block rounded-sm"
-                  style={{ width: 7, height: 7, background: group.color, flexShrink: 0 }}
-                />
-                <span
-                  className="text-[10px] font-bold uppercase tracking-widest"
-                  style={{ color: 'var(--text-dim)' }}
-                >
-                  {group.title}
-                </span>
-              </div>
-              {group.topics.map(topicSlug => {
-                const href = `/${group.slug}/${topicSlug}`
-                const isActive = pathname === href
-                return (
-                  <Link
-                    key={topicSlug}
-                    href={href}
-                    onClick={() => setOpen(false)}
-                    className="block px-2.5 py-1.5 rounded-md text-[13px] font-medium mb-0.5 transition-colors"
-                    style={{
-                      color: isActive ? 'var(--accent)' : 'var(--text-muted)',
-                      background: isActive ? 'var(--card-bg)' : 'transparent',
-                      fontWeight: isActive ? 600 : 500,
-                    }}
-                  >
-                    {slugToTitle(topicSlug)}
-                  </Link>
-                )
-              })}
-            </div>
-          ))}
-        </nav>
+        <SidebarContent
+          navGroups={navGroups}
+          searchEntries={searchEntries}
+          onLinkClick={() => setOpen(false)}
+        />
       </aside>
     </>
   )

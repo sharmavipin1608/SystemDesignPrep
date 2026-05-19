@@ -16,21 +16,28 @@
 }
 
 .dark {
-  --bg: #0f0f1a;
-  --sidebar-bg: #13131f;
-  --card-bg: #1a1a2e;
-  --border: #2a2a3a;
+  --bg: #0d0d1a;
+  --sidebar-bg: #111120;
+  --card-bg: #1c1c30;
+  --border: #2e2e45;
   --text: #e2e8f0;
   --text-muted: #94a3b8;
-  --text-dim: #3a4a5a;
+  --text-dim: #4a5a70;
   --accent: #7c6aff;
-  --section-bg: #1a1a2e;
-  --code-bg: #0a0a14;
+  --section-bg: #161628;
+  --code-bg: #0a0a18;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Reset link defaults so sidebar links don't show browser blue/underline */
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 /* Section color classes */
@@ -64,4 +71,28 @@ body {
   overflow-x: auto;
   margin: 8px 0;
   font-size: 0.78rem;
+}
+
+/* Responsive layout helpers — replacing Tailwind md: variants */
+.desktop-only { display: none !important; }
+.mobile-only  { display: block; }
+
+@media (min-width: 768px) {
+  .desktop-only { display: flex !important; }
+  .mobile-only  { display: none !important; }
+  .main-content { margin-left: 220px; }
+}
+
+/* Section stack — single column, clean */
+.section-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Mermaid SVGs must never overflow their section card */
+.prose-content svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }

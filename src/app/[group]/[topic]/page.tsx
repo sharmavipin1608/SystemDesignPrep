@@ -25,7 +25,7 @@ export default async function TopicPage({ params }: Props) {
   const title = slugToTitle(topicSlug)
 
   return (
-    <div className="px-8 py-8 max-w-4xl">
+    <div className="px-8 py-8 w-full max-w-4xl">
       <h1
         className="text-2xl font-bold tracking-tight mb-1"
         style={{ color: 'var(--text)' }}
