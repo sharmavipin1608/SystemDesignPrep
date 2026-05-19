@@ -16,16 +16,16 @@
 }
 
 .dark {
-  --bg: #0f0f1a;
-  --sidebar-bg: #13131f;
-  --card-bg: #1a1a2e;
-  --border: #2a2a3a;
+  --bg: #0d0d1a;
+  --sidebar-bg: #111120;
+  --card-bg: #1c1c30;
+  --border: #2e2e45;
   --text: #e2e8f0;
   --text-muted: #94a3b8;
-  --text-dim: #3a4a5a;
+  --text-dim: #4a5a70;
   --accent: #7c6aff;
-  --section-bg: #1a1a2e;
-  --code-bg: #0a0a14;
+  --section-bg: #161628;
+  --code-bg: #0a0a18;
 }
 
 body {
@@ -91,7 +91,10 @@ a {
 }
 
 @media (min-width: 768px) {
-  .section-grid { grid-template-columns: repeat(2, 1fr); }
+  .section-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: dense;
+  }
   .section-grid .full-width { grid-column: 1 / -1; }
 }
 

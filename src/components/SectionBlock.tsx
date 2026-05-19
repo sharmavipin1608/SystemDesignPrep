@@ -77,6 +77,7 @@ export function SectionBlock({ section }: Props) {
         style={{
           background: 'var(--section-bg)',
           color: 'var(--text-muted)',
+          ...(section.hasMermaid ? { maxHeight: 420, overflowY: 'auto' } : {}),
         }}
         dangerouslySetInnerHTML={{ __html: section.html.replace(/<h2[^>]*>[\s\S]*?<\/h2>/, '') }}
       />

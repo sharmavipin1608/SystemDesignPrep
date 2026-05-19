@@ -59,6 +59,6 @@ describe('getSubtitle', () => {
       { heading: 'Interview Talking Points', html: '', color: 'gold', label: '', hasMermaid: false },
       { heading: 'Extra Section', html: '', color: 'blue', label: '', hasMermaid: false },
     ]
-    expect(getSubtitle(sections)).toBe('What is it? · Strategies · Failure Modes · Interview Talking Points')
+    expect(getSubtitle(sections)).toBe('Strategies · Failure Modes · Interview Talking Points · Extra Section')
   })
 })
