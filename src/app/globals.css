@@ -72,3 +72,10 @@ a {
   margin: 8px 0;
   font-size: 0.78rem;
 }
+
+/* Mermaid SVGs must never overflow their section card */
+.prose-content svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}

@@ -88,10 +88,19 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
 
   return (
     <>
-      {/* ── Desktop sidebar — always in flex flow, never fixed ── */}
+      {/* ── Desktop sidebar — sticky in page flow, 100vh, no Tailwind for critical dims ── */}
       <aside
-        className="hidden md:flex flex-col w-[220px] shrink-0 h-screen sticky top-0"
-        style={{ background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border)' }}
+        className="hidden md:flex flex-col"
+        style={{
+          width: '220px',
+          flexShrink: 0,
+          height: '100vh',
+          position: 'sticky',
+          top: 0,
+          overflowY: 'auto',
+          background: 'var(--sidebar-bg)',
+          borderRight: '1px solid var(--border)',
+        }}
       >
         <SidebarContent navGroups={navGroups} searchEntries={searchEntries} />
       </aside>

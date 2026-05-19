@@ -17,9 +17,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <div className="flex h-screen overflow-hidden">
+          <div style={{ display: 'flex', alignItems: 'flex-start' }}>
             <Sidebar navGroups={navGroups} searchEntries={searchEntries} />
-            <main className="flex-1 min-w-0 overflow-y-auto">
+            <main style={{ flex: 1, minWidth: 0, minHeight: '100vh' }}>
               {children}
             </main>
           </div>
