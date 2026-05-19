@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Providers>
           <div className="flex h-screen overflow-hidden">
             <Sidebar navGroups={navGroups} searchEntries={searchEntries} />
-            <main className="flex-1 overflow-y-auto">
+            <main className="flex-1 min-w-0 overflow-y-auto">
               {children}
             </main>
           </div>

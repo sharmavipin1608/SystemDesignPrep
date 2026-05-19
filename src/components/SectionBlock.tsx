@@ -34,43 +34,48 @@ export function SectionBlock({ section }: Props) {
   return (
     <div
       className={`section-${section.color} rounded-lg overflow-hidden`}
-      style={{ border: '1px solid var(--border)' }}
+      style={{
+        border: '1px solid var(--border)',
+        background: 'var(--card-bg)',
+      }}
     >
-      {/* Header */}
+      {/* Header: left accent bar + heading + label badge */}
       <div
-        className="flex items-center gap-2 px-3 py-2"
-        style={{ background: `color-mix(in srgb, var(--c) 7%, var(--card-bg))` }}
+        className="flex items-stretch"
+        style={{ borderBottom: '1px solid var(--border)' }}
       >
-        <div
-          className="flex-shrink-0 rounded-sm"
-          style={{ width: 4, height: 18, background: 'var(--c)' }}
-        />
-        <span
-          className="flex-1 text-xs font-bold uppercase tracking-wide"
-          style={{ color: 'var(--c)', letterSpacing: '0.05em' }}
-        >
-          {section.heading}
-        </span>
-        {section.label && (
+        {/* Left color bar */}
+        <div style={{ width: 4, background: 'var(--c)', flexShrink: 0 }} />
+
+        {/* Heading row */}
+        <div className="flex items-center gap-2 px-3 py-2.5 flex-1 min-w-0">
           <span
-            className="text-[10px] font-semibold px-2 py-0.5 rounded"
-            style={{
-              background: `color-mix(in srgb, var(--c) 15%, transparent)`,
-              color: 'var(--c)',
-            }}
+            className="flex-1 min-w-0 text-xs font-bold uppercase tracking-wide truncate"
+            style={{ color: 'var(--c)' }}
           >
-            {section.label}
+            {section.heading}
           </span>
-        )}
+          {section.label && (
+            <span
+              className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded"
+              style={{
+                border: '1px solid var(--c)',
+                color: 'var(--c)',
+                opacity: 0.85,
+              }}
+            >
+              {section.label}
+            </span>
+          )}
+        </div>
       </div>
 
-      {/* Body — strip the h2 tag since we already render it in the header */}
+      {/* Body */}
       <div
         ref={bodyRef}
-        className="prose-content px-3 pb-3 pt-2"
+        className="prose-content px-4 pb-4 pt-3"
         style={{
           background: 'var(--section-bg)',
-          borderTop: '1px solid var(--border)',
           color: 'var(--text-muted)',
         }}
         dangerouslySetInnerHTML={{ __html: section.html.replace(/<h2[^>]*>[\s\S]*?<\/h2>/, '') }}
