@@ -28,35 +28,66 @@ function SidebarContent({
 
   return (
     <>
+      {/* Logo + theme toggle */}
       <div
-        className="flex items-center justify-between px-4 py-3 flex-shrink-0"
-        style={{ borderBottom: '1px solid var(--border)' }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '12px 16px',
+          flexShrink: 0,
+          borderBottom: '1px solid var(--border)',
+        }}
       >
-        <span className="font-bold text-sm" style={{ color: 'var(--accent)', letterSpacing: '-0.3px' }}>
+        <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--accent)', letterSpacing: '-0.3px' }}>
           SystemDesign.prep
         </span>
         <ThemeToggle />
       </div>
 
-      <div className="px-3 py-2 flex-shrink-0" style={{ borderBottom: '1px solid var(--border)' }}>
+      {/* Search */}
+      <div style={{ padding: '8px 12px', flexShrink: 0, borderBottom: '1px solid var(--border)' }}>
         <SearchModal entries={searchEntries} />
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-3 px-2">
+      {/* Nav groups */}
+      <nav style={{ flex: 1, overflowY: 'auto', padding: '12px 8px' }}>
         {navGroups.map(group => (
-          <div key={group.slug} className="mb-5">
-            <div className="flex items-center gap-1.5 px-2 mb-1.5">
+          <div key={group.slug} style={{ marginBottom: 20 }}>
+            {/* Group label row */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '0 8px',
+                marginBottom: 4,
+              }}
+            >
               <span
-                className="inline-block rounded-sm flex-shrink-0"
-                style={{ width: 7, height: 7, background: group.color }}
+                style={{
+                  display: 'inline-block',
+                  width: 7,
+                  height: 7,
+                  borderRadius: '50%',
+                  flexShrink: 0,
+                  background: group.color,
+                }}
               />
               <span
-                className="text-[10px] font-bold uppercase tracking-widest"
-                style={{ color: 'var(--text-dim)' }}
+                style={{
+                  fontSize: '0.6rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.12em',
+                  color: 'var(--text-dim)',
+                }}
               >
                 {group.title}
               </span>
             </div>
+
+            {/* Topic links */}
             {group.topics.map(topicSlug => {
               const href = `/${group.slug}/${topicSlug}`
               const isActive = pathname === href
@@ -65,11 +96,15 @@ function SidebarContent({
                   key={topicSlug}
                   href={href}
                   onClick={onLinkClick}
-                  className="block px-2.5 py-1.5 rounded-md text-[13px] mb-0.5 transition-colors"
                   style={{
+                    display: 'block',
+                    padding: '5px 10px',
+                    borderRadius: 6,
+                    fontSize: '0.8rem',
+                    marginBottom: 1,
                     color: isActive ? 'var(--accent)' : 'var(--text-muted)',
                     background: isActive ? 'var(--card-bg)' : 'transparent',
-                    fontWeight: isActive ? 600 : 500,
+                    fontWeight: isActive ? 600 : 400,
                   }}
                 >
                   {slugToTitle(topicSlug)}
@@ -88,7 +123,7 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
 
   return (
     <>
-      {/* ── Desktop sidebar — fixed position, visible md+, pushes content via margin-left ── */}
+      {/* Desktop sidebar */}
       <aside
         className="desktop-only flex-col"
         style={{
@@ -106,7 +141,7 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
         <SidebarContent navGroups={navGroups} searchEntries={searchEntries} />
       </aside>
 
-      {/* ── Mobile: hamburger button ── */}
+      {/* Mobile: hamburger */}
       <button
         aria-label="Toggle menu"
         onClick={() => setOpen(o => !o)}
@@ -122,7 +157,7 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
         <span style={{ display: 'block', width: 18, height: 2, background: 'var(--text)' }} />
       </button>
 
-      {/* ── Mobile: backdrop ── */}
+      {/* Mobile: backdrop */}
       {open && (
         <div
           className="mobile-only"
@@ -131,7 +166,7 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
         />
       )}
 
-      {/* ── Mobile: slide-in panel ── */}
+      {/* Mobile: slide-in panel */}
       <aside
         className="mobile-only"
         style={{

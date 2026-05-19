@@ -7,15 +7,26 @@ interface Props {
 }
 
 const COLLAPSED_HEIGHT = 180
+const rawHtml = (html: string) => html.replace(/<h2[^>]*>[\s\S]*?<\/h2>/, '')
 
 export function SectionBlock({ section }: Props) {
   const bodyRef = useRef<HTMLDivElement>(null)
   const [collapsed, setCollapsed] = useState(true)
+  // After mermaid renders SVGs into the DOM, we capture the innerHTML here.
+  // This prevents React re-renders (from toggling collapsed) from stomping
+  // the SVGs back to raw <code> blocks via dangerouslySetInnerHTML.
+  const [renderedHtml, setRenderedHtml] = useState<string | null>(null)
 
   useEffect(() => {
+    // Reset on section change
+    setRenderedHtml(null)
+
     if (!section.hasMermaid || !bodyRef.current) return
     const codeBlocks = bodyRef.current.querySelectorAll('code.language-mermaid')
     if (codeBlocks.length === 0) return
+
+    const total = codeBlocks.length
+    let done = 0
 
     import('mermaid').then(({ default: mermaid }) => {
       mermaid.initialize({ startOnLoad: false, theme: 'dark' })
@@ -29,10 +40,18 @@ export function SectionBlock({ section }: Props) {
           block.parentElement?.replaceWith(wrapper)
         } catch {
           // leave as code block if mermaid fails
+        } finally {
+          done++
+          if (done === total && bodyRef.current) {
+            // Capture SVG-rendered HTML so future re-renders use it
+            setRenderedHtml(bodyRef.current.innerHTML)
+          }
         }
       })
     })
   }, [section.hasMermaid, section.html])
+
+  const displayHtml = renderedHtml ?? rawHtml(section.html)
 
   return (
     <div
@@ -40,7 +59,6 @@ export function SectionBlock({ section }: Props) {
       style={{
         borderRadius: 8,
         overflow: 'hidden',
-        /* Left accent bar spans full card height */
         borderTop: '1px solid var(--border)',
         borderRight: '1px solid var(--border)',
         borderBottom: '1px solid var(--border)',
@@ -48,7 +66,7 @@ export function SectionBlock({ section }: Props) {
         background: 'var(--card-bg)',
       }}
     >
-      {/* Header: heading + badge */}
+      {/* Header */}
       <div
         style={{
           display: 'flex',
@@ -101,17 +119,14 @@ export function SectionBlock({ section }: Props) {
               ? { maxHeight: COLLAPSED_HEIGHT, overflow: 'hidden' }
               : {}),
           }}
-          dangerouslySetInnerHTML={{ __html: section.html.replace(/<h2[^>]*>[\s\S]*?<\/h2>/, '') }}
+          dangerouslySetInnerHTML={{ __html: displayHtml }}
         />
 
-        {/* Fade overlay when collapsed */}
         {section.hasMermaid && collapsed && (
           <div
             style={{
               position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
+              bottom: 0, left: 0, right: 0,
               height: 52,
               background: 'linear-gradient(transparent, var(--section-bg))',
               pointerEvents: 'none',
@@ -119,7 +134,6 @@ export function SectionBlock({ section }: Props) {
           />
         )}
 
-        {/* Expand / collapse toggle */}
         {section.hasMermaid && (
           <button
             onClick={() => setCollapsed(c => !c)}
