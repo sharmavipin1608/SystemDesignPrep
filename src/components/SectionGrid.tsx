@@ -9,9 +9,7 @@ export function SectionGrid({ sections }: Props) {
   return (
     <div className="section-grid">
       {sections.map((section, i) => (
-        <div key={i} className={section.hasMermaid ? 'full-width' : ''}>
-          <SectionBlock section={section} />
-        </div>
+        <SectionBlock key={i} section={section} />
       ))}
     </div>
   )

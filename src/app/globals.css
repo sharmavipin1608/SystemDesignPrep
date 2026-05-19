@@ -83,19 +83,11 @@ a {
   .main-content { margin-left: 220px; }
 }
 
-/* Section grid: 1 col mobile, 2 col desktop */
+/* Section stack — single column, clean */
 .section-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-
-@media (min-width: 768px) {
-  .section-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-flow: dense;
-  }
-  .section-grid .full-width { grid-column: 1 / -1; }
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* Mermaid SVGs must never overflow their section card */

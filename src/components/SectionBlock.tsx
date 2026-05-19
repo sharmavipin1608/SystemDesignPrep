@@ -6,7 +6,7 @@ interface Props {
   section: TopicSection
 }
 
-const COLLAPSED_HEIGHT = 160
+const COLLAPSED_HEIGHT = 180
 
 export function SectionBlock({ section }: Props) {
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -36,36 +36,66 @@ export function SectionBlock({ section }: Props) {
 
   return (
     <div
-      className={`section-${section.color} rounded-lg overflow-hidden`}
-      style={{ border: '1px solid var(--border)', background: 'var(--card-bg)' }}
+      className={`section-${section.color}`}
+      style={{
+        borderRadius: 8,
+        overflow: 'hidden',
+        /* Left accent bar spans full card height */
+        borderTop: '1px solid var(--border)',
+        borderRight: '1px solid var(--border)',
+        borderBottom: '1px solid var(--border)',
+        borderLeft: '4px solid var(--c)',
+        background: 'var(--card-bg)',
+      }}
     >
-      {/* Header: left accent bar + heading + label badge */}
-      <div className="flex items-stretch" style={{ borderBottom: '1px solid var(--border)' }}>
-        <div style={{ width: 4, background: 'var(--c)', flexShrink: 0 }} />
-        <div className="flex items-center gap-2 px-3 py-2.5 flex-1 min-w-0">
+      {/* Header: heading + badge */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border)',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: 'var(--c)',
+          }}
+        >
+          {section.heading}
+        </span>
+        {section.label && (
           <span
-            className="flex-1 min-w-0 text-xs font-bold uppercase tracking-wide truncate"
-            style={{ color: 'var(--c)' }}
+            style={{
+              fontSize: '0.65rem',
+              fontWeight: 600,
+              padding: '2px 7px',
+              borderRadius: 4,
+              border: '1px solid var(--c)',
+              color: 'var(--c)',
+              opacity: 0.9,
+              whiteSpace: 'nowrap',
+              marginLeft: 8,
+              flexShrink: 0,
+            }}
           >
-            {section.heading}
+            {section.label}
           </span>
-          {section.label && (
-            <span
-              className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded"
-              style={{ border: '1px solid var(--c)', color: 'var(--c)', opacity: 0.85 }}
-            >
-              {section.label}
-            </span>
-          )}
-        </div>
+        )}
       </div>
 
       {/* Body */}
       <div style={{ position: 'relative', background: 'var(--section-bg)' }}>
         <div
           ref={bodyRef}
-          className="prose-content px-4 pb-4 pt-3"
+          className="prose-content"
           style={{
+            padding: '10px 14px 12px',
             color: 'var(--text-muted)',
             ...(section.hasMermaid && collapsed
               ? { maxHeight: COLLAPSED_HEIGHT, overflow: 'hidden' }
@@ -74,7 +104,7 @@ export function SectionBlock({ section }: Props) {
           dangerouslySetInnerHTML={{ __html: section.html.replace(/<h2[^>]*>[\s\S]*?<\/h2>/, '') }}
         />
 
-        {/* Gradient fade when collapsed */}
+        {/* Fade overlay when collapsed */}
         {section.hasMermaid && collapsed && (
           <div
             style={{
@@ -82,7 +112,7 @@ export function SectionBlock({ section }: Props) {
               bottom: 0,
               left: 0,
               right: 0,
-              height: 48,
+              height: 52,
               background: 'linear-gradient(transparent, var(--section-bg))',
               pointerEvents: 'none',
             }}
@@ -97,7 +127,7 @@ export function SectionBlock({ section }: Props) {
               display: 'block',
               width: '100%',
               padding: '5px 0',
-              fontSize: '0.72rem',
+              fontSize: '0.7rem',
               fontWeight: 600,
               letterSpacing: '0.05em',
               textAlign: 'center',
@@ -107,7 +137,7 @@ export function SectionBlock({ section }: Props) {
               cursor: 'pointer',
             }}
           >
-            {collapsed ? '▼ Show diagram' : '▲ Collapse'}
+            {collapsed ? '▼  Show diagram' : '▲  Collapse'}
           </button>
         )}
       </div>
