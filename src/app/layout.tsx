@@ -17,12 +17,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-            <Sidebar navGroups={navGroups} searchEntries={searchEntries} />
-            <main style={{ flex: 1, minWidth: 0, minHeight: '100vh' }}>
-              {children}
-            </main>
-          </div>
+          <Sidebar navGroups={navGroups} searchEntries={searchEntries} />
+          <main className="main-content" style={{ minHeight: '100vh' }}>
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

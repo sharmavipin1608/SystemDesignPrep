@@ -7,9 +7,9 @@ interface Props {
 
 export function SectionGrid({ sections }: Props) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className="section-grid">
       {sections.map((section, i) => (
-        <div key={i} className={section.hasMermaid ? 'md:col-span-2' : ''}>
+        <div key={i} className={section.hasMermaid ? 'full-width' : ''}>
           <SectionBlock section={section} />
         </div>
       ))}

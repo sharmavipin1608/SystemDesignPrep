@@ -73,6 +73,28 @@ a {
   font-size: 0.78rem;
 }
 
+/* Responsive layout helpers — replacing Tailwind md: variants */
+.desktop-only { display: none !important; }
+.mobile-only  { display: block; }
+
+@media (min-width: 768px) {
+  .desktop-only { display: flex !important; }
+  .mobile-only  { display: none !important; }
+  .main-content { margin-left: 220px; }
+}
+
+/* Section grid: 1 col mobile, 2 col desktop */
+.section-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .section-grid { grid-template-columns: repeat(2, 1fr); }
+  .section-grid .full-width { grid-column: 1 / -1; }
+}
+
 /* Mermaid SVGs must never overflow their section card */
 .prose-content svg {
   max-width: 100%;

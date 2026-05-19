@@ -88,16 +88,17 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
 
   return (
     <>
-      {/* ── Desktop sidebar — sticky in page flow, 100vh, no Tailwind for critical dims ── */}
+      {/* ── Desktop sidebar — fixed position, visible md+, pushes content via margin-left ── */}
       <aside
-        className="hidden md:flex flex-col"
+        className="desktop-only flex-col"
         style={{
-          width: '220px',
-          flexShrink: 0,
-          height: '100vh',
-          position: 'sticky',
+          position: 'fixed',
           top: 0,
+          left: 0,
+          width: '220px',
+          height: '100vh',
           overflowY: 'auto',
+          zIndex: 20,
           background: 'var(--sidebar-bg)',
           borderRight: '1px solid var(--border)',
         }}
@@ -109,8 +110,12 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
       <button
         aria-label="Toggle menu"
         onClick={() => setOpen(o => !o)}
-        className="md:hidden fixed top-3 left-3 z-50 p-2 rounded-md"
-        style={{ background: 'var(--card-bg)', border: '1px solid var(--border)' }}
+        className="mobile-only"
+        style={{
+          position: 'fixed', top: 12, left: 12, zIndex: 50,
+          padding: 8, borderRadius: 6,
+          background: 'var(--card-bg)', border: '1px solid var(--border)',
+        }}
       >
         <span style={{ display: 'block', width: 18, height: 2, background: 'var(--text)', marginBottom: 4 }} />
         <span style={{ display: 'block', width: 18, height: 2, background: 'var(--text)', marginBottom: 4 }} />
@@ -120,16 +125,22 @@ export function Sidebar({ navGroups, searchEntries }: Props) {
       {/* ── Mobile: backdrop ── */}
       {open && (
         <div
-          className="md:hidden fixed inset-0 z-30"
-          style={{ background: 'rgba(0,0,0,0.5)' }}
+          className="mobile-only"
+          style={{ position: 'fixed', inset: 0, zIndex: 30, background: 'rgba(0,0,0,0.5)' }}
           onClick={() => setOpen(false)}
         />
       )}
 
       {/* ── Mobile: slide-in panel ── */}
       <aside
-        className={`md:hidden fixed top-0 left-0 z-40 h-full flex flex-col w-[260px] transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border)' }}
+        className="mobile-only"
+        style={{
+          position: 'fixed', top: 0, left: 0, zIndex: 40, height: '100%',
+          width: 260, display: 'flex', flexDirection: 'column',
+          transform: open ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 200ms',
+          background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border)',
+        }}
       >
         <SidebarContent
           navGroups={navGroups}
